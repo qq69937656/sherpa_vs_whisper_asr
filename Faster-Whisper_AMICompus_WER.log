@@ -1,0 +1,26 @@
+--------------------------------------------------
+正在加载模型 medium.en (AMI Corpus 适配版)...
+模型加载完成。
+--------------------------------------------------
+正在搜索 /opt/Audio_Datasets/AMICorpus 下的前 10 个有效文件对...
+已找到 10 个待测文件。
+--------------------------------------------------
+File: TS3011d.Mix-Headset.wav | WER: 0.6573 | Dist: 3052 | RefWords: 4643 | Duration: 2157.41s
+File: TS3005c.Mix-Headset.wav | WER: 0.6510 | Dist: 4273 | RefWords: 6564 | Duration: 2403.00s
+File: ES2005a.Mix-Headset.wav | WER: 0.7831 | Dist: 585 | RefWords: 747 | Duration: 477.88s
+File: ES2007d.Mix-Headset.wav | WER: 0.6503 | Dist: 2073 | RefWords: 3188 | Duration: 1249.51s
+File: TS3007a.Mix-Headset.wav | WER: 0.9890 | Dist: 3329 | RefWords: 3366 | Duration: 1609.34s
+File: TS3009a.Mix-Headset.wav | WER: 0.9364 | Dist: 3977 | RefWords: 4247 | Duration: 1505.90s
+File: ES2013a.Mix-Headset.wav | WER: 0.9591 | Dist: 1479 | RefWords: 1542 | Duration: 825.17s
+File: ES2003c.Mix-Headset.wav | WER: 0.5753 | Dist: 3442 | RefWords: 5983 | Duration: 2256.93s
+File: ES2006d.Mix-Headset.wav | WER: 0.8008 | Dist: 4824 | RefWords: 6024 | Duration: 1967.45s
+File: ES2010c.Mix-Headset.wav | WER: 0.6864 | Dist: 3677 | RefWords: 5357 | Duration: 1837.76s
+
+==================================================
+评测完成 (AMI Corpus Top 10)
+实际处理文件数: 10
+总编辑距离: 30711
+总参考单词数: 41661
+-------------------------
+平均错词率 (Average WER): 73.72%
+==================================================
