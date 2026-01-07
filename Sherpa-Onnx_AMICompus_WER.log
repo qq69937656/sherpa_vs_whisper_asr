@@ -1,0 +1,39 @@
+nohup: ignoring input
+--------------------------------------------------
+初始化 Sherpa-onnx (AMICorpus 快速评测, Limit=10)...
+加载模型:
+  Enc: encoder-epoch-99-avg-1.int8.onnx
+  Dec: decoder-epoch-99-avg-1.onnx
+  Join: joiner-epoch-99-avg-1.onnx
+模型加载完成。
+--------------------------------------------------
+开始遍历: /opt/Audio_Datasets/AMICorpus
+[1/10] File: TS3011d.Mix-Headset.wav
+  Duration: 2157.41s | Words: 4643 | Dist: 1411 | WER: 0.3039
+[2/10] File: TS3005c.Mix-Headset.wav
+  Duration: 2403.00s | Words: 6564 | Dist: 2713 | WER: 0.4133
+[3/10] File: ES2005a.Mix-Headset.wav
+  Duration: 477.88s | Words: 747 | Dist: 277 | WER: 0.3708
+[4/10] File: ES2007d.Mix-Headset.wav
+  Duration: 1249.51s | Words: 3188 | Dist: 880 | WER: 0.2760
+[5/10] File: TS3007a.Mix-Headset.wav
+  Duration: 1609.34s | Words: 3366 | Dist: 1218 | WER: 0.3619
+[6/10] File: TS3009a.Mix-Headset.wav
+  Duration: 1505.90s | Words: 4247 | Dist: 1723 | WER: 0.4057
+[7/10] File: ES2013a.Mix-Headset.wav
+  Duration: 825.17s | Words: 1542 | Dist: 370 | WER: 0.2399
+[8/10] File: ES2003c.Mix-Headset.wav
+  Duration: 2256.93s | Words: 5983 | Dist: 1269 | WER: 0.2121
+[9/10] File: ES2006d.Mix-Headset.wav
+  Duration: 1967.45s | Words: 6024 | Dist: 2037 | WER: 0.3381
+[10/10] File: ES2010c.Mix-Headset.wav
+  Duration: 1837.76s | Words: 5357 | Dist: 1082 | WER: 0.2020
+
+==================================================
+测试结束 (Limit Reached)
+处理文件总数: 10
+总编辑距离: 12980
+总参考单词数: 41661
+-------------------------
+平均错词率 (Average WER): 31.16%
+==================================================
