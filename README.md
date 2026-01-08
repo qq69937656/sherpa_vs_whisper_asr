@@ -10,3 +10,5 @@
 测试环境：硬件：NVIDIA Tesla V100-PCIE-32GB；Intel(R) Xeon(R) Silver 4316 CPU（32 CPU）；64GB RAM。
         软件：Ubuntu 20.04.6 LTS；Python 3.12.9；PyTorch 2.2.2 (CUDA 12.1)；Sherpa-onnx 1.12.20；Faster-Whisper 1.2.0。
         其中Sherpa-onnx为官网下载源码编译以支持GPU，官方源仅支持CPU
+
+benchmark文件用来评测Sherpa-onnx单线程、多线程并发下cpu或cuda的RTF与TTFT，前提是Sherpa-onnx要支持GPU，如果是cuda12.x，可以从官网下载源码编译。默认的pip install安装的是cpu版本
