@@ -1,0 +1,34 @@
+graph TD
+    Start[音频输入流与评测任务配置] --> Dispatcher{模型架构路由调度}
+
+    Dispatcher -- 路由至 Faster-Whisper --> FW_Mode{执行策略配置}
+    Dispatcher -- 路由至 Sherpa-onnx --> SO_Stream[0.1s 细粒度音频流式分片]
+
+    subgraph Faster-Whisper 算法执行分支
+        FW_Mode -- 离线基准 Topline --> FW_Off[全量音频文件一次性加载]
+        FW_Off --> FW_Off_Infer[依赖全局上下文与内置 VAD 离线推理]
+
+        FW_Mode -- 基础分片 配置A1 --> FW_Seg[1.0s 固定时长无重叠分片]
+        FW_Seg --> FW_Seg_Infer[剥离上下文的强制独立推理<br>引发截断与幻觉]
+
+        FW_Mode -- 滑动窗口 配置A2 --> FW_Slide[动态音频缓存与滑动拼接]
+        FW_Slide --> FW_Slide_Infer[提取词级时间戳执行文本回退与裁剪<br>解决截断错误]
+    end
+
+    subgraph Sherpa-onnx 算法执行分支
+        SO_Stream --> SO_Infer[依赖内部状态机的 Transducer 即时响应推理]
+        SO_Infer --> SO_Mode{是否挂载语义增强模块?}
+
+        SO_Mode -- 原生流式 配置B1 --> SO_Native[直接输出原始声学识别文本]
+
+        SO_Mode -- 结合 BERT 配置B2 --> SO_BERT[触发轻量级 BERT 模型异步节流推理]
+        SO_BERT --> SO_BERT_Out[补全标点符号与大小写规范文本]
+    end
+
+    FW_Off_Infer --> Result[统一识别结果序列化与时间戳打点]
+    FW_Seg_Infer --> Result
+    FW_Slide_Infer --> Result
+    SO_Native --> Result
+    SO_BERT_Out --> Result
+
+    Result --> Metrics[传递至指标计算模块<br>统计 WER / RTF / TTFT]
