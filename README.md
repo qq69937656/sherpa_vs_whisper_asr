@@ -76,7 +76,7 @@ python main_controller.py \
 
 ---
 
-## 💡 执行模式深度说明 [cite: 134]
+## 💡 执行模式深度说明
 
 ### Faster-Whisper 分支（非流式架构适配）
 * **fw_offline** (全量离线基准模式): 性能基准上界（Topline），不进行流式分片，直接将长音频全量送入模型，仅用于提取理想状态下的 WER。
@@ -89,7 +89,7 @@ python main_controller.py \
 
 ---
 
-## 📊 性能指标定义 [cite: 145]
+## 📊 性能指标定义
 
 系统采用并行监测机制，实时采集以下关键性能指标：
 
