@@ -49,6 +49,7 @@
 ```bash
 git clone [https://github.com/qq69937656/sherpa_vs_whisper_asr.git](https://github.com/qq69937656/sherpa_vs_whisper_asr.git)
 cd sherpa_vs_whisper_asr
+```
 
 ### 2. 执行评测任务
 
@@ -62,16 +63,49 @@ python main_controller.py \
   --dataset LibriSpeech \
   --metric TTFT \
   --concurrency 50
+```
 
-参数说明 ：
-  参数,说明,可选值示例
---module,算法执行模式,"fw_offline, fw_segment, fw_slide, so_native, so_bert"
---dataset,测试数据集,"LibriSpeech, TEDLIUM, AMICorpus"
---metric,评测指标,"WER (准确率), RTF (吞吐量), TTFT (延迟)"
---concurrency,并发数,默认为 1
---------------------------
-## 性能指标定义
-* [cite_start]WER (Word Error Rate)：词错误率。将模型输出文本与标准文本对齐，计算插入、删除与替换错误数量 。
-* [cite_start]TTFT (Time To First Token)：首字上屏延迟。统计起点统一定义为首个音频分片生成的时刻，终点为首个识别文本输出的时刻 。
-* [cite_start]RTF (Real Time Factor)：实时率。根据模型总推理耗时与音频总时长的比值计算 。
--------------------------------
+### 3. 核心参数详细规范 [cite: 66, 67, 68, 74, 75, 76]
+
+| 参数 | 属性 | 说明 | 可选值 (Options) |
+| :--- | :--- | :--- | :--- |
+| `--module` | **必填** | 决定系统拉起的底层算法模型与配置策略 [cite: 68] | `fw_offline`, `fw_segment`, `fw_slide`, `so_native`, `so_bert` [cite: 69, 70, 71, 72, 73] |
+| `--dataset` | **必填** | 系统内置路径映射映射字典，自动下发物理路径与清洗规则 [cite: 74] | `LibriSpeech`, `TEDLIUM`, `AMICorpus` [cite: 74] |
+| `--metric` | **必填** | 选择评测的性能指标维度 [cite: 75] | `WER` (串行准确率), `RTF` (并发吞吐量), `TTFT` (并发首字延迟) [cite: 75] |
+| `--concurrency` | 选填 | 并发任务路数（默认为 1），仅在测 RTF 或 TTFT 时生效 [cite: 76] | 整数 (Integer) [cite: 76] |
+
+---
+
+## 💡 执行模式深度说明 [cite: 134]
+
+### Faster-Whisper 分支（非流式架构适配） [cite: 135]
+* **fw_offline** (全量离线基准模式): 性能基准上界（Topline），不进行流式分片，直接将长音频全量送入模型，仅用于提取理想状态下的 WER [cite: 137]。
+* **fw_segment** (基础分片准实时模式): 将音频在内存中严格切分为固定时长（1.0s）的无重叠分片，量化强制干预引发的单词截断错误 [cite: 138]。
+* **fw_slide** (滑动窗口重叠优化模式): 引入动态音频缓存与基于字级时间戳的“时间回退与裁剪”机制，验证上下文拼接对识别准确率的修复效果 [cite: 139]。
+
+### Sherpa-ONNX 分支（原生流式架构） [cite: 140]
+* **so_native** (原生流式实时模式): 依靠 Transducer 内部状态机实现即时推理，音频切分为 0.1s 极小粒度数据包，评估极限吞吐下的延迟与并发能力 [cite: 142]。
+* **so_bert** (挂载 BERT 语义增强模式): 在流式输出末端挂载轻量级 BERT 模型进行异步节流调用，模拟真实工业应用中语义修饰带来的边际延迟负担 [cite: 143]。
+
+---
+
+## 📊 性能指标定义 [cite: 145]
+
+系统采用并行监测机制，实时采集以下关键性能指标：
+
+* **WER (Word Error Rate)**：词错误率。将模型输出文本与标准文本对齐，计算插入、删除与替换错误比例，衡量识别准确度 [cite: 145]。
+* **TTFT (Time To First Token)**：首字上屏延迟。统计起点为首个音频分片生成时刻，终点为首个识别文本输出时刻，反映系统响应速度 [cite: 145]。
+* **RTF (Real Time Factor)**：实时率。模型总推理耗时与音频总时长的比值，反映模型在特定硬件环境下的处理效率 [cite: 145]。
+
+---
+
+## 🛡️ 系统关键技术
+
+* **多进程路由调度**：主控调度层与执行层实现进程级物理隔离，任务结束后彻底回收 GPU 显存，杜绝显存泄漏 [cite: 85, 111]。
+* **并行指标采集与锁控制**：在高并发场景下利用线程安全锁（threading.Lock）实现安全静默落盘，避免 I/O 阻塞导致测量失真 [cite: 196, 201, 203]。
+* **双轨数据输出策略**：终端仅抽样显示进度，全量实验原始数据实时追加写入本地 CSV，便于后续性能分析与绘图 [cite: 201, 202, 203]。
+
+---
+
+**编写人**：李鲲程 [cite: 3]
+**编写时间**：2026.1.9 [cite: 4]
